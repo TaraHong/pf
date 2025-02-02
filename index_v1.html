@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Ensure proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transaction Entry</title>
+  <style>
+    /* Basic styling for a mobile-friendly UI */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    .container {
+      background: #fff;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e9e9e9;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Transaction Entry</h1>
+    <form id="transactionForm">
+      <label for="date">Date:</label>
+      <input type="date" id="date" required>
+      
+      <label for="type">Type:</label>
+      <select id="type" required>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+      </select>
+      
+      <label for="account">Account:</label>
+      <select id="account" required>
+        <option value="Checking">Checking</option>
+        <option value="Credit Card">Credit Card</option>
+      </select>
+      
+      <label for="description">Description:</label>
+      <input type="text" id="description" placeholder="Enter description" required>
+      
+      <label for="amount">Amount ($):</label>
+      <input type="number" id="amount" placeholder="Enter amount" step="0.01" required>
+      
+      <button type="submit">Submit Transaction</button>
+    </form>
+    
+    <div id="log"></div>
+  </div>
+  
+  <script>
+    // Helper function to log messages to the "log" div and the console.
+    function log(msg) {
+      var logDiv = document.getElementById("log");
+      logDiv.innerHTML += msg + "<br>";
+      console.log(msg);
+    }
+    
+    // Function to send the transaction to Google Sheets via POST.
+    function saveTransactionToGoogleSheet(transaction) {
+      // Use your deployed Apps Script web app URL here.
+      const url = "https://script.google.com/macros/s/AKfycbx2nAHrCfeyxDYsLiEbQJ0pmUw5yNB6SqaEznQwD0v1YPQJvh-F5AIW0FYEPduOeabxdA/exec";
+      
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",  // Use no-cors to allow the request even though the response is opaque
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(transaction)
+      })
+      .then(response => {
+        log("HTTP status: " + response.status);
+        // With mode: no-cors, the response is opaque, so we cannot read its body.
+        log("Response is opaque; if no error is thrown, the request likely succeeded.");
+      })
+      .catch(error => {
+        log("Fetch error: " + error);
+      });
+    }
+    
+    // Event listener for form submission.
+    document.getElementById("transactionForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Collect values from form fields.
+      const date = document.getElementById("date").value;
+      const type = document.getElementById("type").value;
+      const account = document.getElementById("account").value;
+      const description = document.getElementById("description").value;
+      const amount = document.getElementById("amount").value;
+      
+      // Build the transaction object.
+      const transaction = { date, type, account, description, amount };
+      log("Submitting transaction: " + JSON.stringify(transaction));
+      
+      // Send the transaction to Google Sheets.
+      saveTransactionToGoogleSheet(transaction);
+      
+      // Reset the form.
+      this.reset();
+    });
+  </script>
+</body>
+</html>

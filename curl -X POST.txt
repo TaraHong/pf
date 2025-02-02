@@ -1,0 +1,6 @@
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"date": "2025-02-01", "type": "Income", "description": "Test", "account": "Checking", "amount": "100"}' \
+  "https://script.google.com/macros/s/AKfycbxwrM5ZXlbGN8YjFwsXaRQSjlES2Gzw2A0nWrBjh3afNH5Awv3TjTNA0DFjKZk8wf6-BQ/exec"
+
+curl -Method Post -Uri "https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbx9iKNTO4UZFodpUPJjPvZDpdZweEGEI1wsrxT0F31ZlfdRxIglk2jlKjREy5NsUfaoAA/exec" -Headers @{ "Content-Type" = "application/json" } -Body '{"date": "2025-02-01", "type": "Income", "description": "Test", "account": "Checking", "amount": "100"}'
