@@ -129,6 +129,9 @@
     .highlight-expense {
       background-color: #ffe6e6;
     }
+    .highlight-medium {
+    background-color: #fff3cd;  /* Light yellow background */
+    }
     /* Log area */
     #log {
       margin-top: 20px;
@@ -299,8 +302,12 @@
       tbody.innerHTML = "";
       transactions.forEach((tx, index) => {
         const row = document.createElement("tr");
-        if (tx.type === "Expense" && parseFloat(tx.amount) > 200) {
-          row.classList.add("highlight-expense");
+        if (tx.type === "Expense") {
+          if (parseFloat(tx.amount) > 200) {
+            row.classList.add("highlight-expense");  // red highlight for >$200
+          } else if (parseFloat(tx.amount) > 100) {
+            row.classList.add("highlight-medium");   // yellow highlight for >$100
+          }
         }
         row.innerHTML = `
           <td>${tx.date}</td>
