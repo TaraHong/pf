@@ -74,23 +74,6 @@
       padding: 8px;
       background-color: #2196F3;
     }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-    margin-top: 1rem;
-  }
-
-.pagination button {
-  width: auto;
-  min-width: 80px;
-}
-
-.pagination span {
-  margin: 0 10px;
-}
     /* Transaction History Table */
     .table-container {
       overflow-x: auto;
@@ -282,8 +265,6 @@
     
     // Chart variable.
     let budgetChart;
-
-  
     
     // Helper function to log messages.
     function log(message) {
@@ -319,82 +300,29 @@
     function updateTransactionTable() {
       const tbody = document.querySelector("#transactionTable tbody");
       tbody.innerHTML = "";
-  
-  // Calculate pagination
-    const startIndex = (currentPage - 1) * recordsPerPage;
-    const endIndex = startIndex + recordsPerPage;
-    const paginatedTransactions = transactions.slice(startIndex, endIndex);
-  
-  // Display paginated transactions
-  paginatedTransactions.forEach((tx, index) => {
-    const row = document.createElement("tr");
-    if (tx.type === "Expense") {
-      if (parseFloat(tx.amount) > 200) {
-        row.classList.add("highlight-expense");  // red highlight for >$200
-      } else if (parseFloat(tx.amount) > 100) {
-        row.classList.add("highlight-medium");   // yellow highlight for >$100
-      }
+      transactions.forEach((tx, index) => {
+        const row = document.createElement("tr");
+        if (tx.type === "Expense") {
+          if (parseFloat(tx.amount) > 200) {
+            row.classList.add("highlight-expense");  // red highlight for >$200
+          } else if (parseFloat(tx.amount) > 100) {
+            row.classList.add("highlight-medium");   // yellow highlight for >$100
+          }
+        }
+        row.innerHTML = `
+          <td>${tx.date}</td>
+          <td>${tx.type}</td>
+          <td>${tx.description}</td>
+          <td>${tx.account}</td>
+          <td>$${parseFloat(tx.amount).toFixed(2)}</td>
+          <td>
+            <button class="action-btn edit" onclick="editTransaction(${index})">✏️</button>
+            <button class="action-btn delete" onclick="deleteTransaction(${index})">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
     }
-    row.innerHTML = `
-      <td>${tx.date}</td>
-      <td>${tx.type}</td>
-      <td>${tx.description}</td>
-      <td>${tx.account}</td>
-      <td>$${parseFloat(tx.amount).toFixed(2)}</td>
-      <td>
-        <button class="action-btn edit" onclick="editTransaction(${startIndex + index})">✏️</button>
-        <button class="action-btn delete" onclick="deleteTransaction(${startIndex + index})">🗑️</button>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-  
-  // Update pagination controls
-  updatePaginationControls();
-}
-
-function updatePaginationControls() {
-  // Remove existing pagination if it exists
-  const existingPagination = document.querySelector('.pagination');
-  if (existingPagination) {
-    existingPagination.remove();
-  }
-
-  const totalPages = Math.ceil(transactions.length / recordsPerPage);
-  const paginationDiv = document.createElement("div");
-  paginationDiv.className = "pagination";
-  
-  const prevButton = document.createElement("button");
-  prevButton.innerText = "Prev";
-  prevButton.disabled = currentPage === 1;
-  prevButton.onclick = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      updateTransactionTable();
-    }
-  };
-  
-  const nextButton = document.createElement("button");
-  nextButton.innerText = "Next";
-  nextButton.disabled = currentPage >= totalPages;
-  nextButton.onclick = () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      updateTransactionTable();
-    }
-  };
-  
-  const pageInfo = document.createElement("span");
-  pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
-  
-  paginationDiv.appendChild(prevButton);
-  paginationDiv.appendChild(pageInfo);
-  paginationDiv.appendChild(nextButton);
-  
-  // Add pagination controls after the table
-  const table = document.getElementById("transactionTable");
-  table.parentNode.insertBefore(paginationDiv, table.nextSibling);
-}
     
     // Update the Summary Table.
     function updateSummary() {
