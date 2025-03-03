@@ -201,26 +201,6 @@
       <button id="shareSummary">Share Summary</button>
     </div>
     
-    <!-- Transaction History Table -->
-    <h2>Transaction History</h2>
-    <div class="table-container">
-      <table id="transactionTable">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Description</th>
-            <th>Account</th>
-            <th>Amount ($)</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Transaction rows will be generated here -->
-        </tbody>
-      </table>
-    </div>
-    
     <!-- Summary Table -->
     <h2>Summary</h2>
     <table class="summary-table">
@@ -242,11 +222,36 @@
       </tr>
     </table>
     
+
+    
+
     <!-- Chart Area: Shows Budget Usage -->
     <div class="chart-container">
       <canvas id="budgetChart" width="300" height="300"></canvas>
     </div>
+
+
+    <!-- Transaction History Table -->
+    <h2>Transaction History</h2>
+    <div class="table-container">
+      <table id="transactionTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Account</th>
+            <th>Amount ($)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Transaction rows will be generated here -->
+        </tbody>
+      </table>
+    </div>
     
+
     <!-- Log Output Area -->
     <div id="log"></div>
   </div>
